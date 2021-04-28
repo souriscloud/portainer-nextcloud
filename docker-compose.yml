@@ -1,0 +1,30 @@
+version: '2'
+
+volumes:
+  nextcloud:
+  db:
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+
+  app:
+    image: nextcloud
+    ports:
+      - 8086:80
+    links:
+      - db
+    volumes:
+      - nextcloud:/var/www/html
+      - /data/disk0/cloud:/var/www/html/data
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    
+    
+    # image for template https://cdn.rawgit.com/docker-library/docs/e563b6cd3d797e2b3695576d20041227d1fb7536/nextcloud/logo.svg
